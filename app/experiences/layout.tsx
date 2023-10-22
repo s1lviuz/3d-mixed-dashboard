@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import NavButtons from '../navButtons'
+import NavButtons from './navButtons'
 
 export const metadata: Metadata = {
   title: 'Create Next App',

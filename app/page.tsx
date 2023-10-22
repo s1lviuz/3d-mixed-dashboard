@@ -20,7 +20,8 @@ export default function Home() {
   }, [])
 
   const experiencesList = useMemo(() => [
-    newEperience(1, 'Basics')
+    newEperience(1, 'Basics'),
+    newEperience(2, 'Drei Helpers'),
   ], [])
 
   return (
@@ -32,7 +33,7 @@ export default function Home() {
         <div className="min-h-[200px] py-4">
           <ul>
             {experiencesList.map((experience) => (
-              <li key={experience.id}>
+              <li key={experience.id} className="mt-1">
                 <Button fullWidth
                   onClick={() => {
                     router.push(`/experiences/${experience.id}`)
