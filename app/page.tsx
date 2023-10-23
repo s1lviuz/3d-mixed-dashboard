@@ -22,6 +22,7 @@ export default function Home() {
   const experiencesList = useMemo(() => [
     newEperience(1, 'Basics'),
     newEperience(2, 'Drei Helpers'),
+    newEperience(3, 'Debugging'),
   ], [])
 
   return (
