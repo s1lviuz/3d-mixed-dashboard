@@ -1,9 +1,20 @@
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-
+import { useRef } from 'react'
+import { Mesh } from 'three'
+import { Perf } from 'r3f-perf'
 
 export function Experience() {
+    const cube = useRef<Mesh>(null)
+
+    useFrame((state, delta) => {
+        if (cube.current)
+            cube.current.rotation.y += delta * 0.2
+    })
+
     return <>
+
+        <Perf position="top-left" />
 
         <OrbitControls makeDefault />
 
@@ -15,7 +26,7 @@ export function Experience() {
             <meshStandardMaterial color="orange" />
         </mesh>
 
-        <mesh position-x={2} scale={1.5}>
+        <mesh ref={cube} position-x={2} scale={1.5}>
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
         </mesh>

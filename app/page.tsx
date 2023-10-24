@@ -23,6 +23,7 @@ export default function Home() {
     newEperience(1, 'Basics'),
     newEperience(2, 'Drei Helpers'),
     newEperience(3, 'Debugging'),
+    newEperience(4, 'Environment'),
   ], [])
 
   return (
