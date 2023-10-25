@@ -1,8 +1,8 @@
 'use client'
 
-import { Button } from "@nextui-org/react"
+import { Button, Spinner } from "@nextui-org/react"
 import { useRouter } from "next/navigation"
-import { useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 interface Experience {
   id: number
@@ -12,12 +12,10 @@ interface Experience {
 export default function Home() {
   const router = useRouter()
 
-  const newEperience = useCallback((id: number, title: string): Experience => {
-    return {
-      id,
-      title
-    }
-  }, [])
+  const newEperience = useCallback((id: number, title: string): Experience => ({
+    id,
+    title
+  }), [])
 
   const experiencesList = useMemo(() => [
     newEperience(1, 'Basics'),
@@ -26,6 +24,12 @@ export default function Home() {
     newEperience(4, 'Environment'),
     newEperience(5, 'Load models'),
   ], [])
+
+  const [loading, setLoading] = useState(false)
+
+  if (loading) return <main className="h-[100vh] flex items-center justify-center">
+    <Spinner size="lg" />
+  </main>
 
   return (
     <main className="h-[100vh] flex items-center justify-center">
@@ -39,6 +43,7 @@ export default function Home() {
               <li key={experience.id} className="mt-1">
                 <Button fullWidth
                   onClick={() => {
+                    setLoading(true)
                     router.push(`/experiences/${experience.id}`)
                   }}
                 >
