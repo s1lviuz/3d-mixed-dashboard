@@ -1,24 +1,25 @@
 'use client'
 
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, useGLTF } from '@react-three/drei'
 import { useRef } from 'react'
 import { Mesh } from 'three'
 
 export function Experience() {
     const cube = useRef<Mesh>(null)
 
+    const model = useGLTF('/model/portal.glb')
+
     useFrame((state, delta) => {
         
     })
 
     return <>
+        <color args={['#030202']} attach={'background'} />
+
         <OrbitControls makeDefault />
 
-        <mesh ref={cube} position-x={2} scale={1.5}>
-            <boxGeometry />
-            <meshStandardMaterial color="mediumpurple" />
-        </mesh>
+        <mesh geometry={model.nodes.baked.geometry} />
     </>
 }
 
