@@ -23,6 +23,7 @@ export default function Home() {
     newEperience(3, 'Debugging'),
     newEperience(4, 'Environment'),
     newEperience(5, 'Load models'),
+    newEperience(6, '3D Text'),
   ], [])
 
   const [loading, setLoading] = useState(false)
