@@ -1,6 +1,6 @@
 'use client'
 
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, ThreeEvent, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { useRef } from 'react'
 import { Mesh } from 'three'
@@ -14,21 +14,40 @@ export function Experience() {
             cube.current.rotation.y += delta * 0.2
     })
 
+    const handleCubeClick = (event: ThreeEvent<MouseEvent>) => {
+        event.object?.material.color.set(`hsl(${Math.random() * 360}, 100%, 75%)`)
+    }
+
+    const handleCubePointOver = (event: ThreeEvent<PointerEvent>) => {
+        event.object?.scale.set(2, 2, 2)
+    }
+
+    const handleCubePointLeave = (event: ThreeEvent<PointerEvent>) => {
+        event.object?.scale.set(1.5, 1.5, 1.5)
+    }
+
     return <>
 
-        <Perf position="top-left" />
+        <Perf position="top-right" />
 
         <OrbitControls makeDefault />
 
         <directionalLight position={[1, 2, 3]} intensity={1.5} />
         <ambientLight intensity={0.5} />
 
-        <mesh position-x={- 2}>
+        <mesh position-x={- 2} onClick={e => { e.stopPropagation() }} onPointerOver={e => { e.stopPropagation() }} onPointerLeave={e => { e.stopPropagation() }}>
             <sphereGeometry />
             <meshStandardMaterial color="orange" />
         </mesh>
 
-        <mesh ref={cube} position-x={2} scale={1.5}>
+        <mesh
+            ref={cube}
+            position-x={2}
+            scale={1.5}
+            onClick={handleCubeClick}
+            onPointerOver={handleCubePointOver}
+            onPointerLeave={handleCubePointLeave}
+        >
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
         </mesh>

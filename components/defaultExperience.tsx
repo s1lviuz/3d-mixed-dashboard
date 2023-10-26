@@ -16,7 +16,7 @@ export function Experience() {
 
     return <>
 
-        <Perf position="top-left" />
+        <Perf position="top-right" />
 
         <OrbitControls makeDefault />
 
