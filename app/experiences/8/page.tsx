@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, ThreeEvent, useFrame } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, meshBounds, useGLTF } from '@react-three/drei'
 import { useRef } from 'react'
 import { Mesh } from 'three'
 import { Perf } from 'r3f-perf'
@@ -9,10 +9,16 @@ import { Perf } from 'r3f-perf'
 export function Experience() {
     const cube = useRef<Mesh>(null)
 
+    const hamburger = useGLTF('/hamburger.glb')
+
     useFrame((state, delta) => {
         if (cube.current)
             cube.current.rotation.y += delta * 0.2
     })
+
+    const handleCubePointEnter = (event: ThreeEvent<PointerEvent>) => {
+        document.body.style.cursor = 'pointer'
+    }
 
     const handleCubeClick = (event: ThreeEvent<MouseEvent>) => {
         event.object?.material.color.set(`hsl(${Math.random() * 360}, 100%, 75%)`)
@@ -24,6 +30,7 @@ export function Experience() {
 
     const handleCubePointLeave = (event: ThreeEvent<PointerEvent>) => {
         event.object?.scale.set(1.5, 1.5, 1.5)
+        document.body.style.cursor = 'auto'
     }
 
     return <>
@@ -35,16 +42,17 @@ export function Experience() {
         <directionalLight position={[1, 2, 3]} intensity={1.5} />
         <ambientLight intensity={0.5} />
 
-        <mesh position-x={- 2} onClick={e => { e.stopPropagation() }} onPointerOver={e => { e.stopPropagation() }} onPointerLeave={e => { e.stopPropagation() }}>
-            <sphereGeometry />
-            <meshStandardMaterial color="orange" />
+        <mesh scale={0.35} position-x={- 2} onClick={e => { e.stopPropagation() }} onPointerOver={e => { e.stopPropagation() }} onPointerLeave={e => { e.stopPropagation() }}>
+            <primitive object={hamburger.scene} />
         </mesh>
 
         <mesh
             ref={cube}
+            raycast={meshBounds}
             position-x={2}
             scale={1.5}
             onClick={handleCubeClick}
+            onPointerEnter={handleCubePointEnter}
             onPointerOver={handleCubePointOver}
             onPointerLeave={handleCubePointLeave}
         >
