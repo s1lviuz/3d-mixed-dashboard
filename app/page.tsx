@@ -26,6 +26,7 @@ export default function Home() {
     newEperience(6, '3D Text'),
     newEperience(7, 'Portal'),
     newEperience(8, 'Events'),
+    newEperience(9, 'Post-processing'),
   ], [])
 
   const [loading, setLoading] = useState(false)
