@@ -3,41 +3,48 @@
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { forwardRef, useRef } from 'react'
-import { Mesh, Vector2 } from 'three'
+import { Mesh, Texture, Uniform, Vector2, WebGLRenderTarget, WebGLRenderer } from 'three'
 import { Perf } from 'r3f-perf'
 import { Bloom, DepthOfField, EffectComposer, Glitch, Noise, SSR, Vignette } from '@react-three/postprocessing'
 import { BlendFunction, Effect, GlitchMode } from 'postprocessing'
 import { Leva, useControls } from 'leva'
 
 const fragmentShader = /* glsl */`
+    uniform float frequency;
+    uniform float amplitude;
+    uniform float offset;
+
     void mainUv(inout vec2 uv) {
-        uv.y += sin(uv.x * 10.0) * 0.1;
+        uv.y += sin(uv.x * frequency + offset) * amplitude;
     }
 
     void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
-        vec4 color = inputColor;
-        // color.rgb += vec3(0.8, 1.0, 0.5);
-        outputColor = color;
+        outputColor = vec4(0.8, 1.0, 0.5, inputColor.a);
     }
 `
 
 class DrunkEffect extends Effect {
 
-
     constructor(props: any) {
         super('DrunkEffect', fragmentShader, {
+            blendFunction: props.blendFunction || BlendFunction.DARKEN,
             uniforms: new Map([
-                ['frequency', { value: props.frequency }],
-                ['amplitude', { value: props.amplitude }]   
+                ['frequency', new Uniform(props.frequency)],
+                ['amplitude', new Uniform(props.amplitude)],
+                ['offset', new Uniform(0)],
             ])
         })
+    }
+
+    update(renderer: WebGLRenderer, inputBuffer: WebGLRenderTarget<Texture>, deltaTime?: number | undefined): void {
+        this.uniforms.get('offset')!.value += deltaTime! * 0.5
     }
 }
 
 const Drunk = forwardRef((props: any, ref) => {
     const effect = new DrunkEffect(props)
 
-    return <primitive ref={ref} object={effect} /> 
+    return <primitive ref={ref} object={effect} />
 })
 
 export function Experience() {
@@ -74,8 +81,13 @@ export function Experience() {
     //     ior: { value: 1.45, min: 0, max: 2 }
     // })
 
+    const drunkProps = useControls('Drunk Effect', {
+        frequency: { value: 2, min: 0, max: 20 },
+        amplitude: { value: 0.1, min: 0, max: 1 }
+    })
+
     useFrame((state, delta) => {
-        
+
     })
 
     return <>
@@ -114,10 +126,10 @@ export function Experience() {
                 {...SSRProps}
             /> */}
 
-            <Drunk 
+            <Drunk
                 ref={drunkRef}
-                frequency={2}
-                amplitude={0.1}
+                frequency={drunkProps.frequency}
+                amplitude={drunkProps.amplitude}
             />
         </EffectComposer>
 
