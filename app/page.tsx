@@ -28,6 +28,7 @@ export default function Home() {
     newEperience(8, 'Events'),
     newEperience(9, 'Post-processing'),
     newEperience(10, 'Portifolio'),
+    newEperience(11, 'Physics'),
   ], [])
 
   const [loading, setLoading] = useState(false)
