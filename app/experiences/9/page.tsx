@@ -126,11 +126,11 @@ export function Experience() {
                 {...SSRProps}
             /> */}
 
-            <Drunk
+            {/* <Drunk
                 ref={drunkRef}
                 frequency={drunkProps.frequency}
                 amplitude={drunkProps.amplitude}
-            />
+            /> */}
         </EffectComposer>
 
 

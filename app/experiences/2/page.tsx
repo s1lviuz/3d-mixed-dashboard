@@ -36,7 +36,7 @@ const Experience = () => {
           wrapperClass='label'
           center
           distanceFactor={6}
-          occlude={[sphereRef, cubeRef]}
+          occlude={[cubeRef]}
         >
           <Chip size='lg'>Sphere</Chip>
         </Html>
